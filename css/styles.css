@@ -1,0 +1,46 @@
+body {
+  padding: 0;
+  text-align: center;
+  /* background-color: tan; */
+  background: url("../images/wallpap.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin: 0 auto;
+}
+
+.game-name{
+  /* float: left; */
+
+}
+ .game-name button {
+  font-size: 20x;
+  background-color: brown;
+  color: white;
+  padding: 20px 40px;
+  border: 0;
+  box-shadow: 0;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.game-name h1{
+color: teal;
+font-size: 40px;
+font-family: "Impact";
+}
+
+.game-name h3{
+  color: teal;
+  font-size: 18px;
+  font-family: "Impact";
+  
+  
+  }
+
+#theCanvas {
+  background-image: url("../images/palm2.gif");
+  background-size: cover;
+  background-repeat: no-repeat;
+  /* height: 600px; */
+  /* width: 830px; */
+}
