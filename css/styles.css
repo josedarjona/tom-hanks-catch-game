@@ -8,6 +8,11 @@ body {
   margin: 0 auto;
 }
 
+.blocked {
+  pointer-events: none;
+  
+  background-color: grey;
+}
 
  .game-name button {
   font-size: 20x;
@@ -44,14 +49,20 @@ font-family: "Impact";
 }
 
 #game-result, #game-result-overlay {
+  /* text-align: center; */
   margin: auto;
   width: 830px;
-  height: 600px;
-  position: absolute;
+  height: 610px;
+  /* position: center; */
   /* padding-top: 200px; */
-  top: 250px;
+  position: fixed;
+  margin-left: auto;
+  margin-right: auto;
   left: 0;
   right: 0;
+  top: 90px;
+  /* left: 0; */
+  /* right: 0; */
   bottom: 0;
   z-index: 1;
   display: none;
@@ -75,4 +86,10 @@ font-family: "Impact";
 
 #game-result button {
   font-size: 1.5em;
+}
+
+.blocked {
+  pointer-events: none;
+  
+  /* display: none; */
 }

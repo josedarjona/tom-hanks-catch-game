@@ -2,8 +2,9 @@ window.onload = function() {
   var currentGame;
   var canStart = true;
   var obstacles = [];
-  var speed = 0;
+  // var speedCoco = 0;
   var gameOver = false;
+  var addLife = [];
   
   
   // var tomImage = new Image();
@@ -23,6 +24,14 @@ window.onload = function() {
 
   };
 
+ var TomRight = function (){
+    this.x= currentGame.tom.x;
+    this.y=currentGame.tom.x;
+    this.width = 75;
+    this.height = 100;
+    this.img = "./images/tom_hanks_right.png"
+  }
+
   // Tom.prototype.drawTom = function() {
   //   console.log("s: ", tomImage);
   //   var that = this;
@@ -39,6 +48,8 @@ window.onload = function() {
   // };
 
   var tomImage = new Image();
+  var tomImageRight = new Image();
+
 
   Tom.prototype.drawTom = function() {
     var that = this;
@@ -49,6 +60,16 @@ window.onload = function() {
 
     tomImage.src = "./images/tom_hanks.png";
   };
+
+  // Tom.prototype.drawTomRight = function() {
+  //   var that = this;
+
+
+  //   ctx.drawImage(tomImageRight, that.x, that.y, that.width, that.height);
+  
+
+  //   tomImage.src = "./images/tom_hanks.png";
+  // };
 
   function interval() {
     
@@ -73,14 +94,14 @@ window.onload = function() {
   // imageSource = "./images/tom_hanks.png";
     switch (keyNumber) {
       case 37:
-      // imageSource = "./images/tom_hanks.png";
-
+      // currentGame.tom.drawTom();
         this.x -= 45;
         if (this.x < 0) {
           this.x = 0;
         }
         break;
       case 39:
+      // currentGame.tomRight.drawTomRight();
       // imageSource = "./images/tom_hanks_right.png";
         this.x += 45;
         if (this.x >= 755) {
@@ -117,6 +138,9 @@ window.onload = function() {
       clearInterval(tickerd);
 
    }
+
+   var d = document.getElementById("start-button");
+    d.className += "blocked";
   };
 
   document.getElementById('play-again').addEventListener('click', function() {
@@ -152,6 +176,18 @@ window.onload = function() {
     if((obstacle.y + (obstacle.height - 50) >= currentGame.tom.y && obstacle.y <= currentGame.tom.y + currentGame.tom.height)
     &&(obstacle.x + obstacle.width>= currentGame.tom.x &&obstacle.x <= currentGame.tom.x+currentGame.tom.width)){
       console.log("nom");
+      if (board.catch <= 4) {
+        board.catch += 1;
+        // var cocoLife = ctx.fillText("Plus 1 Life!", 375, 70);
+
+      } 
+      if(board.catch >= 5){
+
+        board.lives +=1;
+        var cocoLife = ctx.fillText("Plus 1 Life!", 375, 70);
+        board.catch = 0;
+      }
+
       return true;
       
     }else if(obstacle.y >= 590){
@@ -165,8 +201,9 @@ window.onload = function() {
 
   var board = {
     lives: 5,
-    timer: 20,
-    frames: 0
+    timer: 60,
+    frames: 0,
+    catch: 0,
   };
 
 
@@ -188,8 +225,28 @@ window.onload = function() {
     this.x = x;
     this.y = y;
 
-    this.speedX = 0;
-    this.speedY = 0;
+    this.speedCocoX = 0;
+    this.speedCocoY = 0;
+
+     function incDiff() {
+      if (board.timer <= 60 && board.timer> 45) {
+        this.speedCocoY = 1;
+
+      } else if (board.timer <= 44 && board.timer > 30) {
+        this.speedCocoY = 5;
+
+      } else if (board.timer <= 29 && board.timer > 15) {
+        this.speedCocoY = 8;
+
+    }else if (board.timer <= 14 && board.timer > 0) {
+    this.speedCocoY = 13;
+
+}
+  
+    return this.speedCocoY;
+}
+
+
     this.img = "./images/coconut1.png";
 
     this.update = function() {
@@ -202,11 +259,13 @@ window.onload = function() {
     }
 
       this.newPos = function() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-      }
+        this.x += this.speedCocoX;
 
-  }
+        this.y += incDiff();
+
+
+    }
+}
   var obstaclesExist = true;
 
   function updateCanvas() {
@@ -221,22 +280,30 @@ window.onload = function() {
     var font =  ctx.font="30px Impact";
     var text = ctx.fillText("Lives: " + board.lives, 375, 30);
     var timeText = ctx.fillText("Timer: " + board.timer, 0, 30);
+    var cocoCount = ctx.fillText("Nom Count: " + board.catch, 0, 70);
 
     
    
-    if (board.frames % 45 === 1) {
-      wallX = Math.floor(Math.random() * 780);
-      wallWidth = 75;
-      wallHeight = 100;
-      obstacles.push(new Component(wallWidth, wallHeight, wallX, 0));
+    if (board.frames % 30 === 1) {
+      cocoX = Math.floor(Math.random() * 780);
+      cocoWidth = 75;
+      cocoHeight = 100;
+      obstacles.push(new Component(cocoWidth, cocoHeight, cocoX, 0));
       // board.frames = 2;
     }
     if(obstaclesExist){
     for (var i = 0; i < obstacles.length; i++) {
       obstacles[i].y += 5;
+      obstacles[i].newPos();
       obstacles[i].update();
+
      if(checkCollision(obstacles[i])){
+
       obstacles.splice(i,1);
+
+      
+      
+      // board.catch +=1;
 
      }
      else if(obstacles[i].y>= 590){
