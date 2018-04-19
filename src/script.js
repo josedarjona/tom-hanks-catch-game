@@ -147,7 +147,7 @@ window.onload = function() {
     document.getElementById('game-result').style.display = 'none';
     document.getElementById('game-result-overlay').style.display = 'none';
     board.lives = 5;
-    board.timer = 20;
+    board.timer = 60;
     currentGame;
     canStart = true;
     obstacles = [];
@@ -184,7 +184,7 @@ window.onload = function() {
       if(board.catch >= 5){
 
         board.lives +=1;
-        var cocoLife = ctx.fillText("Plus 1 Life!", 375, 70);
+        // var cocoLife = ctx.fillText("Plus 1 Life!", 375, 70);
         board.catch = 0;
       }
 
@@ -281,6 +281,7 @@ window.onload = function() {
     var text = ctx.fillText("Lives: " + board.lives, 375, 30);
     var timeText = ctx.fillText("Timer: " + board.timer, 0, 30);
     var cocoCount = ctx.fillText("Nom Count: " + board.catch, 0, 70);
+    // var cocoLife = ctx.fillText("Plus 1 Life!", 375, 70);
 
     
    
