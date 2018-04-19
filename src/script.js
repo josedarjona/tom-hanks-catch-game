@@ -148,10 +148,12 @@ window.onload = function() {
     document.getElementById('game-result-overlay').style.display = 'none';
     board.lives = 5;
     board.timer = 60;
+    // board.weeks = 1;
     currentGame;
     canStart = true;
     obstacles = [];
     obstaclesExist = true;
+
 
 
 
@@ -204,6 +206,7 @@ window.onload = function() {
     timer: 60,
     frames: 0,
     catch: 0,
+    weeks: 1,
   };
 
 
@@ -229,19 +232,51 @@ window.onload = function() {
     this.speedCocoY = 0;
 
      function incDiff() {
-      if (board.timer <= 60 && board.timer> 45) {
+       if (board.weeks === 1){
+      if (board.timer <= 60 && board.timer > 45) {
         this.speedCocoY = 1;
 
       } else if (board.timer <= 44 && board.timer > 30) {
-        this.speedCocoY = 5;
+        this.speedCocoY = 3;
 
       } else if (board.timer <= 29 && board.timer > 15) {
-        this.speedCocoY = 8;
+        this.speedCocoY = 5;
 
     }else if (board.timer <= 14 && board.timer > 0) {
-    this.speedCocoY = 13;
+    this.speedCocoY = 8;
 
 }
+       }else if(board.weeks === 2){
+        if (board.timer <= 60 && board.timer> 45) {
+          this.speedCocoY = 8;
+  
+        } else if (board.timer <= 44 && board.timer > 30) {
+          this.speedCocoY = 10;
+  
+        } else if (board.timer <= 29 && board.timer > 15) {
+          this.speedCocoY = 12;
+  
+      }else if (board.timer <= 14 && board.timer > 0) {
+      this.speedCocoY = 15;
+  
+  }
+
+       }else if(board.weeks === 3){
+        if (board.timer <= 60 && board.timer> 45) {
+          this.speedCocoY = 18;
+  
+        } else if (board.timer <= 44 && board.timer > 30) {
+          this.speedCocoY = 20;
+  
+        } else if (board.timer <= 29 && board.timer > 15) {
+          this.speedCocoY = 22;
+  
+      }else if (board.timer <= 14 && board.timer > 0) {
+      this.speedCocoY = 25;
+  
+  }
+
+       }
   
     return this.speedCocoY;
 }
@@ -281,6 +316,7 @@ window.onload = function() {
     var text = ctx.fillText("Lives: " + board.lives, 375, 30);
     var timeText = ctx.fillText("Timer: " + board.timer, 0, 30);
     var cocoCount = ctx.fillText("Nom Count: " + board.catch, 0, 70);
+    var weekCount = ctx.fillText("Week: " + board.weeks, 700, 30);
     // var cocoLife = ctx.fillText("Plus 1 Life!", 375, 70);
 
     
@@ -304,7 +340,7 @@ window.onload = function() {
 
       
       
-      // board.catch +=1;
+    
 
      }
      else if(obstacles[i].y>= 590){
@@ -314,12 +350,17 @@ window.onload = function() {
     }
     if (board.timer === 0 && board.lives > 0){
 
-
+      // if (board.weeks >= 1){
+        board.weeks +=1;
+      // }
+      console.log("test " + board.weeks);
       obstacles = [];
       obstaclesExist = false;
       document.getElementById('game-result').getElementsByTagName("h1")[0].innerHTML = "YOU SURVIVED!*";
+      document.getElementById("play-again").innerText = "Continue to Week " + board.weeks;
       document.getElementById('game-result').style.display = 'block';
       document.getElementById('game-result-overlay').style.display = 'block';
+      console.log("test " + board.weeks);
 
  
       
@@ -329,8 +370,10 @@ window.onload = function() {
       ticker = false;
       obstacles = [];
       obstaclesExist = false;
+      board.weeks = 1;
 
       document.getElementById('game-result').getElementsByTagName("h1")[0].innerHTML = "YOU DIED!";
+      document.getElementById("play-again").innerText = "Try Again?";
       document.getElementById('game-result').style.display = 'block';
       document.getElementById('game-result-overlay').style.display = 'block';
 
