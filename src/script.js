@@ -3,6 +3,14 @@ window.onload = function() {
   var canStart = true;
   var obstacles = [];
   var speed = 0;
+  var gameOver = false;
+  
+  
+  // var tomImage = new Image();
+  // var imageSource = "./images/tom_hanks.png";
+  // tomImage.src = imageSource;
+
+
 
   var Tom = function() {
     this.x = 233;
@@ -15,17 +23,20 @@ window.onload = function() {
 
   };
 
-  var TomRight = function (){
-    this.x=233;
-    this.y=500;
-    this.width = 75;
-    this.height = 100;
-    this.img = "./images/tom_hanks_right.png"
-  }
-  function interval() {
+  // Tom.prototype.drawTom = function() {
+  //   console.log("s: ", tomImage);
+  //   var that = this;
+  //   tomImage.src = that.img;
+
+  // tomImage.onload = function(){
+  //   console.log("heyy");
+  //   ctx.drawImage(tomImage, that.x, that.y, that.width, that.height);
+  // }
+  
+  // tomImage.src = imageSource;
+
     
-    setInterval(updateCanvas, 30);
-  }
+  // };
 
   var tomImage = new Image();
 
@@ -39,27 +50,50 @@ window.onload = function() {
     tomImage.src = "./images/tom_hanks.png";
   };
 
+  function interval() {
+    
+    setInterval(updateCanvas, 30);
+  }
+  
+  // Tom.prototype.drawTom = function() {
+  //   console.log("s: ", tomImage);
+  //   var that = this;
+  //   // tomImage.src = that.img;
+
+  // tomImage.onload = function(){
+  //   console.log("heyy");
+  //   ctx.drawImage(tomImage, that.x, that.y, that.width, that.height);
+  // }
+  
+
+  //   tomImage.src = imageSource;
+  // };
+
   Tom.prototype.move = function(keyNumber) {
-
-
+  // imageSource = "./images/tom_hanks.png";
     switch (keyNumber) {
       case 37:
+      // imageSource = "./images/tom_hanks.png";
+
         this.x -= 45;
         if (this.x < 0) {
           this.x = 0;
         }
         break;
       case 39:
+      // imageSource = "./images/tom_hanks_right.png";
         this.x += 45;
         if (this.x >= 755) {
           this.x = myCanvas.width - this.width;
         }
         break;
       default:
+        // imageSource = "./images/tom_hanks.png";
         console.log("oops");
     }
-
     currentGame.tom.drawTom();
+
+    
   };
 
   var myCanvas = document.getElementById("theCanvas");
@@ -68,22 +102,38 @@ window.onload = function() {
   document.getElementById("start-button").onclick = function() {
     interval();
     startGame();
-    var ticker;
+    var ticker = true;
     var countdown = function() {
-      if (board.timer >0 ) { // so it doesn't go to -1
+      if (board.timer > 0 ) { // so it doesn't go to -1
          board.timer--;
-      } else {
-         clearInterval(board.timer);
-
-      }
+      } 
     }
-    if(!ticker) {
-      ticker = window.setInterval(function() { 
+    if(ticker = true && board.lives > 0) {
+      var tickerd = window.setInterval(function() { 
         countdown();
       }, 1000);
     
-    }
+    }else {
+      clearInterval(tickerd);
+
+   }
   };
+
+  document.getElementById('play-again').addEventListener('click', function() {
+    document.getElementById('game-result').style.display = 'none';
+    document.getElementById('game-result-overlay').style.display = 'none';
+    board.lives = 5;
+    board.timer = 20;
+    currentGame;
+    canStart = true;
+    obstacles = [];
+    obstaclesExist = true;
+
+
+
+  });
+  
+
   function startGame() {
 
     if (canStart) {
@@ -105,15 +155,17 @@ window.onload = function() {
       return true;
       
     }else if(obstacle.y >= 590){
-    board.lives--;
-    }
+      if (board.lives > 0 ){
+        board.lives--;
+      }
+    } 
 
   }
     
 
   var board = {
     lives: 5,
-    timer: 60,
+    timer: 20,
     frames: 0
   };
 
@@ -155,6 +207,8 @@ window.onload = function() {
       }
 
   }
+  var obstaclesExist = true;
+
   function updateCanvas() {
     ctx.clearRect(0, 0, 830, 700);
 
@@ -168,7 +222,8 @@ window.onload = function() {
     var text = ctx.fillText("Lives: " + board.lives, 375, 30);
     var timeText = ctx.fillText("Timer: " + board.timer, 0, 30);
 
-
+    
+   
     if (board.frames % 45 === 1) {
       wallX = Math.floor(Math.random() * 780);
       wallWidth = 75;
@@ -176,6 +231,7 @@ window.onload = function() {
       obstacles.push(new Component(wallWidth, wallHeight, wallX, 0));
       // board.frames = 2;
     }
+    if(obstaclesExist){
     for (var i = 0; i < obstacles.length; i++) {
       obstacles[i].y += 5;
       obstacles[i].update();
@@ -188,27 +244,30 @@ window.onload = function() {
      }
    
     }
-    if (board.lives <= 0){
-      setTimeout(function(){
-        location.reload();
-      }, 10000);
-      ctx.fillStyle = "red";
-      ctx.fillText("Sorry, you lost all your lives! : ", 200, 230);
-      board.lives = 0;
-      board.timer = 0;
-      // alert("game over");
-    } 
+    if (board.timer === 0 && board.lives > 0){
 
-    if (board.timer === 0){
-      setTimeout(function(){
-        location.reload();
-      }, 10000);
-      ctx.fillStyle = "yellow";
-      ctx.fillText("Dude, your time is up!", 200, 230);
-      board.lives = 0;
-      board.timer = 0;
-    }
+
+      obstacles = [];
+      obstaclesExist = false;
+      document.getElementById('game-result').getElementsByTagName("h1")[0].innerHTML = "YOU SURVIVED!*";
+      document.getElementById('game-result').style.display = 'block';
+      document.getElementById('game-result-overlay').style.display = 'block';
+
+ 
+      
     
+    } else if(board.lives === 0 && board.timer > 0){
+
+      ticker = false;
+      obstacles = [];
+      obstaclesExist = false;
+
+      document.getElementById('game-result').getElementsByTagName("h1")[0].innerHTML = "YOU DIED!";
+      document.getElementById('game-result').style.display = 'block';
+      document.getElementById('game-result-overlay').style.display = 'block';
+
+    }
+  }
 
 
     
