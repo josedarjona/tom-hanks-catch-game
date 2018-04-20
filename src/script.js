@@ -45,13 +45,13 @@ window.onload = function() {
   Tom.prototype.move = function(keyNumber) {
     switch (keyNumber) {
       case 37:
-        this.x -= 45;
+        this.x -= 50;
         if (this.x < 0) {
           this.x = 0;
         }
         break;
       case 39:
-        this.x += 45;
+        this.x += 50;
         if (this.x >= 755) {
           this.x = myCanvas.width - this.width;
         }
